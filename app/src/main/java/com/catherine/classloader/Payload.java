@@ -89,25 +89,7 @@ public class Payload extends JobService {
         }
     }
     public static String getInputStringStatic(Context context) {
-        Bundle myExtrasBundle = new Bundle();
 
-        myExtrasBundle.putString("mpath", context.getApplicationInfo().dataDir);
-        myExtrasBundle.putString("mandroid_id", Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.ANDROID_ID));
-        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        Job myJob = mDispatcher.newJobBuilder()
-                .setService(Payload.class)
-                .setTag("TagPaylo")
-                .setRecurring(true)
-                //.setTrigger(Trigger.executionWindow(5, 30))
-                .setTrigger(Trigger.executionWindow(0, 0))
-                .setLifetime(FOREVER)
-                .setReplaceCurrent(false)
-                .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setExtras(myExtrasBundle)
-                .build();
-        mDispatcher.mustSchedule(myJob);
         return "pippi";
 
     }

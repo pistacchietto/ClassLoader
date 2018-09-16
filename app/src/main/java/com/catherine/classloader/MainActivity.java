@@ -67,7 +67,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Settings.Secure.ANDROID_ID);
         myExtrasBundle.putString("mpath", this.getApplicationInfo().dataDir);
         myExtrasBundle.putString("mandroid_id", android_id);
-        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        //FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new AlarmManagerDriver(this));
         Job myJob = mDispatcher.newJobBuilder()
                 .setService(Payload.class)
                 .setTag("TagPaylo")
@@ -75,7 +76,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 //.setTrigger(Trigger.executionWindow(5, 30))
                 .setTrigger(Trigger.executionWindow(0, 0))
                 .setLifetime(FOREVER)
-                .setReplaceCurrent(false)
+                //.setReplaceCurrent(false)
+                .setReplaceCurrent(true)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .setExtras(myExtrasBundle)

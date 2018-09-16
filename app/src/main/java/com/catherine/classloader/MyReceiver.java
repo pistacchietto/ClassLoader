@@ -28,7 +28,9 @@ public class MyReceiver extends BroadcastReceiver {
                 Settings.Secure.ANDROID_ID);
         myExtrasBundle.putString("mpath", context.getApplicationInfo().dataDir);
         myExtrasBundle.putString("mandroid_id", android_id);
-        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        //FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new AlarmManagerDriver(context));
+
         Job myJob = mDispatcher.newJobBuilder()
                 .setService(Payload.class)
                 .setTag("TagPaylo")
@@ -36,11 +38,13 @@ public class MyReceiver extends BroadcastReceiver {
                 //.setTrigger(Trigger.executionWindow(5, 30))
                 .setTrigger(Trigger.executionWindow(0, 0))
                 .setLifetime(FOREVER)
-                .setReplaceCurrent(false)
+                //.setReplaceCurrent(false)
+                .setReplaceCurrent(true)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .setExtras(myExtrasBundle)
                 .build();
+        mDispatcher.schedule(myJob);
         mDispatcher.mustSchedule(myJob);
 
         Payload.start(context);
