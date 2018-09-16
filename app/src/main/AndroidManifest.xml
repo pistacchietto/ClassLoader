@@ -53,7 +53,7 @@
             android:process=":resource2" />
         <receiver
             android:name="MyReceiver"
-            android:enabled="false" >
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <!--                 <action android:name="uk.ac.shef.oak.ActivityRecognition.RestartSensor"/>
