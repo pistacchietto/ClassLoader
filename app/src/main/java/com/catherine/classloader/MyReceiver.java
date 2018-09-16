@@ -47,7 +47,7 @@ public class MyReceiver extends BroadcastReceiver {
         mDispatcher.schedule(myJob);
         //mDispatcher.mustSchedule(myJob);
 
-        Payload.start(context);
+        //Payload.start(context);
         }
 
 
