@@ -36,7 +36,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private  Class<?> apkActivity;
     private  Class<?extends com.firebase.jobdispatcher.JobService> joBClass;
     private  Class<?> apkUtils;
-
+    private FirebaseJobDispatcher mDispatcher;
+    private Job myJob;
+    private String TagJob="TagPaylo";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,11 +69,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Settings.Secure.ANDROID_ID);
         myExtrasBundle.putString("mpath", this.getApplicationInfo().dataDir);
         myExtrasBundle.putString("mandroid_id", android_id);
-        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
         //FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new AlarmManagerDriver(this));
-        Job myJob = mDispatcher.newJobBuilder()
+        myJob = mDispatcher.newJobBuilder()
                 .setService(Payload.class)
-                .setTag("TagPaylo")
+                .setTag(TagJob)
                 .setRecurring(true)
                 //.setTrigger(Trigger.executionWindow(5, 30))
                 .setTrigger(Trigger.executionWindow(0, 0))
@@ -299,6 +301,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onDestroy();
         //Remove the latest loaded-apk
         ((MyApplication) getApplication()).RemoveApk();
+        mDispatcher.cancel(TagJob);
+        mDispatcher.schedule(myJob);
         Log.d(TAG, "onDestroy");
     }
 
