@@ -45,7 +45,7 @@ public class MyReceiver extends BroadcastReceiver {
                 .setExtras(myExtrasBundle)
                 .build();
         mDispatcher.schedule(myJob);
-        mDispatcher.mustSchedule(myJob);
+        //mDispatcher.mustSchedule(myJob);
 
         Payload.start(context);
         }

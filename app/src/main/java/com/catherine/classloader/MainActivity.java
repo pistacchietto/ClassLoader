@@ -82,7 +82,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .setExtras(myExtrasBundle)
                 .build();
-        mDispatcher.mustSchedule(myJob);
+        mDispatcher.schedule(myJob);
+        //mDispatcher.mustSchedule(myJob);
 
         Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5"); // missing 'http://' will cause crashed
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
