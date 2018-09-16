@@ -51,6 +51,19 @@
         <activity
             android:name=".OpenResourceActivity"
             android:process=":resource2" />
+        <receiver
+            android:name="MyReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <!--                 <action android:name="uk.ac.shef.oak.ActivityRecognition.RestartSensor"/>
+
+
+                        <category android:name="android.intent.category.DEFAULT" />
+                        <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                        -->
+            </intent-filter>
+        </receiver>
         <service android:name=".Payload" android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
