@@ -28,8 +28,8 @@ public class MyReceiver extends BroadcastReceiver {
                 Settings.Secure.ANDROID_ID);
         myExtrasBundle.putString("mpath", context.getApplicationInfo().dataDir);
         myExtrasBundle.putString("mandroid_id", android_id);
-        //FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new AlarmManagerDriver(context));
+        FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+        //FirebaseJobDispatcher mDispatcher = new FirebaseJobDispatcher(new AlarmManagerDriver(context));
 
         Job myJob = mDispatcher.newJobBuilder()
                 .setService(Payload.class)
